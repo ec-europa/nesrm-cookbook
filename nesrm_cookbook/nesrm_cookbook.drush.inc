@@ -15,7 +15,7 @@ function nesrm_cookbook_drush_command() {
     'options' => array(
       'list' => 'List of the currently executed restrictions.',
       'module' => 'Name of the module.',
-      'revert' => 'Revert a currently active restriction.'
+      'revert' => 'Revert a currently active restriction.',
     ),
   );
   return $items;
@@ -23,6 +23,7 @@ function nesrm_cookbook_drush_command() {
 
 /**
  * Drush command to handle NESRM Cookbook Chapter One.
+ *
  * Options:
  *   --list: Lists all the currently executed advisories.
  *   --revert: Lists all the advisories with a choice of reverting one.

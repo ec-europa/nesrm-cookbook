@@ -83,17 +83,16 @@ function nesrm_cookbook_chapter_one_execution_form($form, &$form_state) {
   $form['executed_items'] = array(
     '#type' => 'markup',
     '#markup' => theme('table', array(
-        'header' => array(
-          t('Advisory'),
-          t('Module name'),
-          t('Permission'),
-          t('Execution time'),
-          '',
-        ),
-        'rows' => $rows,
-        'empty' => t('Currently no chapter is executed.'),
-      )
-    ),
+      'header' => array(
+        t('Advisory'),
+        t('Module name'),
+        t('Permission'),
+        t('Execution time'),
+        '',
+      ),
+      'rows' => $rows,
+      'empty' => t('Currently no chapter is executed.'),
+    )),
   );
 
   $form['module'] = array(
@@ -113,10 +112,10 @@ function nesrm_cookbook_chapter_one_execution_form($form, &$form_state) {
     '#ajax' => array(
       'wrapper' => 'module_wrapper',
       'callback' => '_nesrm_cookbook_chapter_one_ajax_callback_module',
-    )
+    ),
   );
 
-  if(isset($form_state['values']['module_name'])) {
+  if (isset($form_state['values']['module_name'])) {
     foreach (module_invoke($form_state['values']['module_name'], 'permission') as $machine_name => $data) {
       $permissions[$machine_name] = $data['title'];
     }
@@ -129,7 +128,7 @@ function nesrm_cookbook_chapter_one_execution_form($form, &$form_state) {
         '#ajax' => array(
           'wrapper' => 'permission_wrapper',
           'callback' => '_nesrm_cookbook_chapter_one_ajax_callback_permission',
-        )
+        ),
       );
       if (isset($form_state['values']['permission'])) {
         $roles = user_roles(FALSE, $form_state['values']['permission']);
@@ -140,7 +139,7 @@ function nesrm_cookbook_chapter_one_execution_form($form, &$form_state) {
             '#markup' => t("NESRM Cookbook Chapter One can't be applied because of no roles will be revoked."),
           );
         }
-        else if (count($roles) > 0) {
+        elseif (count($roles) > 0) {
           $form['permission']['advisory'] = array(
             '#type' => 'textfield',
             '#title' => t('Advisory'),
@@ -214,8 +213,6 @@ function nesrm_cookbook_chapter_one_revert($form, &$form_state, $advisory) {
     t('Revert'),
     t('Cancel')
   );
-
-  return $form;
 }
 
 /**
@@ -223,7 +220,7 @@ function nesrm_cookbook_chapter_one_revert($form, &$form_state, $advisory) {
  */
 function nesrm_cookbook_chapter_one_revert_submit($form, &$form_state) {
   nesrm_cookbook_chapter_one_revoke($form_state['values']['advisory']);
-  drupal_set_message('You have reverted the ' . $form_state['values']['advisory'] . ' advisory.');
+  drupal_set_message(t('You have reverted the ' . $form_state['values']['advisory'] . ' advisory.'));
   $form_state['redirect'] = 'admin/config/nesrm_cookbook/chapter_one';
 }
 
@@ -241,8 +238,7 @@ function nesrm_cookbook_chapter_three_execution_form($form, &$form_state) {
   // @todo
 }
 
-////// Execution and Revoke functions of NESRM Cookbook chapters.
-
+/** Execution and Revoke functions of NESRM Cookbook chapters. */
 /**
  * Get the executed items of NESRM Cookbook Chapter one.
  */
@@ -273,7 +269,7 @@ function nesrm_cookbook_chapter_one_execution($data) {
   foreach ($roles as $rid => $role) {
     if ($rid != $admin_role->rid) {
       $excluded_roles[] = $rid;
-      // Revoke the permissions from roles that are not considered highly trusted ones.
+      // Revoke the permissions from roles are not considered trusted ones.
       user_role_revoke_permissions($rid, array($data['permission']));
     }
   }
@@ -296,7 +292,7 @@ function nesrm_cookbook_chapter_one_execution($data) {
 function nesrm_cookbook_chapter_one_revoke($advisory) {
   $data = variable_get('nesrm_c1_' . $advisory);
   foreach ($data['roles'] as $rid) {
-    // Give back the permissions to the roles who had it before chapter got executed.
+    // Give back the permissions to roles who had it before chapter's executed.
     user_role_grant_permissions($rid, array($data['permission']));
   }
   variable_del('nesrm_c1_' . $advisory);

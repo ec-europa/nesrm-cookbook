@@ -10,5 +10,5 @@ pipeline:
   phpcs:
     image: fpfis/php56-dev
     commands:
-      - ./toolkit/phing test-run-phpcs 
+      - ./toolkit/phpcs nesrm_cookbook
 

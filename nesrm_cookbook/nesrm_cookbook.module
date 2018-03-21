@@ -220,7 +220,7 @@ function nesrm_cookbook_chapter_one_revert($form, &$form_state, $advisory) {
  */
 function nesrm_cookbook_chapter_one_revert_submit($form, &$form_state) {
   nesrm_cookbook_chapter_one_revoke($form_state['values']['advisory']);
-  drupal_set_message(t('You have reverted the ' . $form_state['values']['advisory'] . ' advisory.'));
+  drupal_set_message(t('You have reverted the @advisory advisory.' array('@advisory' => $form_state['values']['advisory'])));
   $form_state['redirect'] = 'admin/config/nesrm_cookbook/chapter_one';
 }
 
@@ -238,7 +238,8 @@ function nesrm_cookbook_chapter_three_execution_form($form, &$form_state) {
   // @todo
 }
 
-/** Execution and Revoke functions of NESRM Cookbook chapters. */
+/* Execution and Revoke functions of NESRM Cookbook chapters. */
+
 /**
  * Get the executed items of NESRM Cookbook Chapter one.
  */

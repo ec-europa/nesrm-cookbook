@@ -7,8 +7,9 @@ pipeline:
       - PROJECT=$(pwd) composer run-script toolkit-install -d ./vendor/ec-europa/toolkit
     volumes:
       - /cache:/cache
+
+  # Run PHPCS on module directory
   phpcs:
     image: fpfis/php56-dev
     commands:
-      - ./toolkit/phpcs nesrm_cookbook
-
+      - ./toolkit/phing test-run-phpcs -Dphpcs.files=nesrm_cookbook

@@ -5,3 +5,9 @@ pipeline:
     commands:
       - composer require ec-europa/toolkit:3.*
       - PROJECT=$(pwd) composer run-script toolkit-install -d ./vendor/ec-europa/toolkit
+
+  phpcs:
+    image: fpfis/php56-dev
+    commands:
+      - ./toolkit/phing test-run-phpcs 
+

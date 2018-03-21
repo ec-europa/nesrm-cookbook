@@ -1,0 +1,6 @@
+pipeline:
+  # Prepare toolkit locally so we can clone and install sites :
+  install-tookit:
+    image: fpfis/php56-dev
+    commands:
+      - composer require ec-europa/toolkit:3.*

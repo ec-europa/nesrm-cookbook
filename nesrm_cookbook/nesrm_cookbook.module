@@ -185,7 +185,7 @@ function _nesrm_cookbook_chapter_one_ajax_callback_permission($form, &$form_stat
  */
 function _nesrm_cookbook_chapter_one_advisory_name_validator($element, &$form_state) {
   if (preg_match('/[^a-z_0-9]/i', $element['#value'])) {
-    form_error($element, t('The "!name" must contain only alphanumerical characters and _ (underscore).', array('!name' => t($element['#title']))));
+    form_error($element, t("The %name must contain only alphanumerical characters and _ (underscore).", array('%name' => t($element['#title']))));
   }
 }
 

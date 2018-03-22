@@ -1,0 +1,38 @@
+# Workspace config :
+workspace:
+  base: /test
+  path: nesrm_cookbook
+
+# Services to run in background :
+services:
+  mysql:
+    image: fpfis/mysql56
+  web:
+    image: fpfis/php56-build
+    environment:
+     - DOCUMENT_ROOT=/test/nesrm_cookbook/webroot
+  frpc-tunnel:
+    image: fpfis/drone-frpc-plugin:latest
+    secrets: [ frpc_token, frpc_server ]
+    environment:
+      - PLUGIN_ENDPOINT=web:8080
+      - PLUGIN_GEN_AUTH=yes
+      - PLUGIN_DOMAIN=cookbook-${DRONE_BUILD_NUMBER}.ci.fpfis.tech.ec.europa.eu
+      - PLUGIN_URL_OUTPUT_FILE=/test/nesrm_cookbook/.frpc
+
+# Steps to run for testing :
+pipeline:
+  # Prepare toolkit locally so we can clone and install sites :
+  install-tookit:
+    image: fpfis/php56-dev
+    commands:
+      - composer require ec-europa/toolkit:3.*
+      - PROJECT=$(pwd) composer run-script toolkit-install -d ./vendor/ec-europa/toolkit
+    volumes:
+      - /cache:/cache
+
+  # Run PHPCS on module directory
+  phpcs:
+    image: fpfis/php56-dev
+    commands:
+      - ./toolkit/phing test-run-phpcs -Dphpcs.files=nesrm_cookbook

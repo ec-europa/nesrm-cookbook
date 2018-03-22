@@ -144,7 +144,8 @@ function nesrm_cookbook_chapter_one_execution_form($form, &$form_state) {
             '#type' => 'textfield',
             '#title' => t('Advisory'),
             '#required' => TRUE,
-            '#description' => t('Insert the id of the security advisory'),
+            '#description' => t('Insert the id of the security advisory. Only alphanumerical characters are allowed and _ (underscore).'),
+            '#element_validate' => array('_nesrm_cookbook_chapter_one_advisory_name_validator'),
           );
           $form['permission']['submit'] = array(
             '#type' => 'submit',
@@ -177,6 +178,15 @@ function _nesrm_cookbook_chapter_one_ajax_callback_module($form, &$form_state) {
  */
 function _nesrm_cookbook_chapter_one_ajax_callback_permission($form, &$form_state) {
   return render($form['permission']);
+}
+
+/**
+ * Validation callback for advisory names.
+ */
+function _nesrm_cookbook_chapter_one_advisory_name_validator($element, &$form_state) {
+  if (preg_match('/[^a-z_0-9]/i', $element['#value'])) {
+    form_error($element, t('The "!name" must contain only alphanumerical characters and _ (underscore).', array('!name' => t($element['#title']))));
+  }
 }
 
 /**

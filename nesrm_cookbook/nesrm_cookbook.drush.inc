@@ -67,7 +67,13 @@ function nesrm_cookbook_drush_command_chapter_one() {
           drush_print("NESRM Cookbook Chapter One can't be applied because of no roles will be revoked.");
         }
         else {
-          $advisory = drush_prompt(dt('Insert the id of the security advisory.'));
+          // Protect the advisory value in the same way like in the form.
+          $advisory_name_is_valid = FALSE;
+          drush_print(dt('Advisory name allows alphanumerical characters and _ (underscore).'));
+          while (!$advisory_name_is_valid) {
+            $advisory = drush_prompt(dt('Insert the id of the security advisory'));
+            (preg_match('/[^a-z_0-9]/i', $advisory)) ? drush_print(dt('Invalid advisory name!')) : $advisory_name_is_valid = TRUE;
+          }
           $data = array(
             'advisory' => $advisory,
             'permission' => $permission,
